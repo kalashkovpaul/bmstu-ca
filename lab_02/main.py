@@ -1,5 +1,5 @@
-from matplotlib import pyplot as plt
-import xlrd
+# from matplotlib import pyplot as plt
+# import xlrd
 
 
 class Dot:
@@ -16,16 +16,16 @@ class Buf_dot:
         self.val = val
 
 
-def culc_func_for_newton(args, dictt):
+def calculate_newton(args, dictt):
     if len(args) == 1:
         return dictt[args[0]]
     if len(args) == 2:
         return (dictt[args[0]] - dictt[args[1]]) / (args[0] - args[1])
     else:
-        return (culc_func_for_newton(args[:-1], dictt) - culc_func_for_newton(args[1:], dictt)) / (args[0] - args[-1])
+        return (calculate_newton(args[:-1], dictt) - calculate_newton(args[1:], dictt)) / (args[0] - args[-1])
 
 
-def culc_func_for_ermit(args, dictt):
+def calculate_ermit(args, dictt):
     if len(args) == 1:
         return dictt[args[0]][0]
     if len(args) == 2 and args[0] != args[1]:
@@ -33,10 +33,10 @@ def culc_func_for_ermit(args, dictt):
     elif len(args) == 2 and args[0] == args[1]:
         return dictt[args[0]][1]
     else:
-        return (culc_func_for_ermit(args[:-1], dictt) - culc_func_for_ermit(args[1:], dictt)) / (args[0] - args[-1])
+        return (calculate_ermit(args[:-1], dictt) - calculate_ermit(args[1:], dictt)) / (args[0] - args[-1])
 
 
-def find_start_and_stop(n, x, dots):
+def find_borders(n, x, dots):
     if n + 1 > len(dots):
         print('Недостаточно точек для заданного n!')
         exit(1)
@@ -61,8 +61,8 @@ def find_start_and_stop(n, x, dots):
     return start_ind, stop_ind
 
 
-def Newton_way(n, x, dots, printFl=0):
-    start_ind, stop_ind = find_start_and_stop(n, x, dots)
+def newton(n, x, dots, printFl=0):
+    start_ind, stop_ind = find_borders(n, x, dots)
 
     res = 0
     func_dict = {}
@@ -80,14 +80,14 @@ def Newton_way(n, x, dots, printFl=0):
             args.append(dots[start_ind + k].arg)
             if k >= 1:
                 loc_sum *= (x - dots[start_ind + k - 1].arg)
-        loc_sum *= culc_func_for_newton(args, func_dict)
+        loc_sum *= calculate_newton(args, func_dict)
         res += loc_sum
 
     return res
 
 
-def Ermit_way(n, x, dots):
-    start_ind, stop_ind = find_start_and_stop(n, x, dots)
+def ermit(n, x, dots):
+    start_ind, stop_ind = find_borders(n, x, dots)
 
     res = 0
     func_dict = {}
@@ -106,7 +106,7 @@ def Ermit_way(n, x, dots):
                 if l >= 1:
                     loc_sum *= (x - dots[start_ind + k].x)
 
-            loc_sum *= culc_func_for_ermit(args, func_dict)
+            loc_sum *= calculate_ermit(args, func_dict)
             res += loc_sum
 
     return res
@@ -164,15 +164,15 @@ for k in range(len(dots_mtr)):
         buf_dots = []
         for i in range(len(dots_mtr[k][j])):
             buf_dots.append(Buf_dot(dots_mtr[k][j][i].x, dots_mtr[k][j][i].val))
-        vect.append(Newton_way(nx, x, buf_dots))
+        vect.append(newton(nx, x, buf_dots))
     buf_dots = []
     for j in range(len(dots_mtr[k])):
         buf_dots.append(Buf_dot(dots_mtr[k][j][0].y, vect[j]))
-    vect_res.append(Newton_way(ny, y, buf_dots))
+    vect_res.append(newton(ny, y, buf_dots))
 
 buf_dots = []
 for k in range(len(dots_mtr)):
     buf_dots.append(Buf_dot(dots_mtr[k][0][0].z, vect_res[k]))
 
-res = Newton_way(nz, z, buf_dots)
+res = newton(nz, z, buf_dots)
 print(f'res = {res}')
