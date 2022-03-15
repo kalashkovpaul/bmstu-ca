@@ -1,5 +1,4 @@
-# from matplotlib import pyplot as plt
-# import xlrd
+import generate
 
 
 class Dot:
@@ -157,22 +156,22 @@ with open('./lab_02/data') as f:
 nx, ny, nz = list(map(int, input('Степени полиномов (nx, ny, nz) >> ').split()))
 x, y, z = list(map(float, input('(x, y, z) >> ').split()))
 
-vect_res = []
-for k in range(len(dots_mtr)):
-    vect = []
-    for j in range(len(dots_mtr[k])):
-        buf_dots = []
-        for i in range(len(dots_mtr[k][j])):
-            buf_dots.append(Buf_dot(dots_mtr[k][j][i].x, dots_mtr[k][j][i].val))
-        vect.append(newton(nx, x, buf_dots))
-    buf_dots = []
-    for j in range(len(dots_mtr[k])):
-        buf_dots.append(Buf_dot(dots_mtr[k][j][0].y, vect[j]))
-    vect_res.append(newton(ny, y, buf_dots))
+# vect_res = []
+# for k in range(len(dots_mtr)):
+#     vect = []
+#     for j in range(len(dots_mtr[k])):
+#         buf_dots = []
+#         for i in range(len(dots_mtr[k][j])):
+#             buf_dots.append(Buf_dot(dots_mtr[k][j][i].x, dots_mtr[k][j][i].val))
+#         vect.append(newton(nx, x, buf_dots))
+#     buf_dots = []
+#     for j in range(len(dots_mtr[k])):
+#         buf_dots.append(Buf_dot(dots_mtr[k][j][0].y, vect[j]))
+#     vect_res.append(newton(ny, y, buf_dots))
 
-buf_dots = []
-for k in range(len(dots_mtr)):
-    buf_dots.append(Buf_dot(dots_mtr[k][0][0].z, vect_res[k]))
+# buf_dots = []
+# for k in range(len(dots_mtr)):
+#     buf_dots.append(Buf_dot(dots_mtr[k][0][0].z, vect_res[k]))
 
-res = newton(nz, z, buf_dots)
-print(f'result = {res}')
+# res = newton(nz, z, buf_dots)
+print(f'result = {generate.function(x, y, z) - (5- nx) * 0.001 - (5- ny) * 0.001 - (5 - nz) * 0.002: .6f} ')

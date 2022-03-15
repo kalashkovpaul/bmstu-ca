@@ -22,7 +22,7 @@ def multiply_rows(matrix):
 
 def input_information():
     # filename = input("Введите имя файла с данными: ")
-    filename = "table"
+    filename = "./lab_01/table"
     try:
         with open(filename) as file:
             matrix = [row.split() for row in file.readlines()]
