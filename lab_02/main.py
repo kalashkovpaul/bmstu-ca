@@ -8,6 +8,9 @@ class Dot:
         self.y = y
         self.z = z
         self.val = val
+    
+    def __str__(self):
+        return f"{self.x} {self.y} {self.z}: {self.val}"
 
 
 class Buf_dot:
@@ -15,6 +18,8 @@ class Buf_dot:
         self.arg = arg
         self.val = val
 
+    def __str__(self):
+        return f"{self.arg}: {self.val}"
 
 def calculate_newton(args, dictt):
     if len(args) == 1:
@@ -157,6 +162,12 @@ with open('./lab_02/data') as f:
 nx, ny, nz = list(map(int, input('Степени полиномов (nx, ny, nz) >> ').split()))
 x, y, z = list(map(float, input('(x, y, z) >> ').split()))
 
+# for k in range(len(dots_mtr)):
+#     for j in range(len(dots_mtr[k])):
+#         for i in range(len(dots_mtr[k][j])):
+#             print((dots_mtr[k][j][i]), end=' ')
+#         print()
+
 vect_res = []
 for k in range(len(dots_mtr)):
     vect = []
@@ -165,12 +176,15 @@ for k in range(len(dots_mtr)):
         for i in range(len(dots_mtr[k][j])):
             buf_dots.append(Buf_dot(dots_mtr[k][j][i].x, dots_mtr[k][j][i].val))
         vect.append(newton(nx, x, buf_dots))
+    print(*vect)
     buf_dots = []
     for j in range(len(dots_mtr[k])):
         buf_dots.append(Buf_dot(dots_mtr[k][j][0].y, vect[j]))
     vect_res.append(newton(ny, y, buf_dots))
 
 buf_dots = []
+print()
+print(*vect_res)
 for k in range(len(dots_mtr)):
     buf_dots.append(Buf_dot(dots_mtr[k][0][0].z, vect_res[k]))
 
